@@ -1,0 +1,155 @@
+# ── 1. INTEGER TYPES ─────────────────────────────────────
+# int from [min..max] generates a random integer in [min, max].
+
+small:  int from [1..10]
+medium: int from [1..1000]
+large:  int from [1..1000000000]
+
+# Bounds can reference previously declared variables.
+lo: int from [1..50]
+hi: int from [lo..100]       # hi is always >= lo
+
+@println(lo, hi)
+
+
+# ── 2. ARITHMETIC IN BOUNDS ──────────────────────────────
+# Constant expressions are evaluated at compile time.
+# Variable expressions are left for the runtime.
+
+n:    int from [1..100]
+low:  int from [1..n*2]
+high: int from [low..n*2+50]
+
+@println(n, low, high)
+
+
+# ── 3. STRING TYPES ──────────────────────────────────────
+# string(len) from <charset>
+
+# Fixed length, single character class
+dna:    string(20)  from ['A'..'A'] + "CGT"
+
+# Variable length driven by another variable
+word:   string(n)   from ['a'..'z']
+
+# Mixed-case alphabetic
+mixed:  string(10)  from ['a'..'z'] + ['A'..'Z']
+
+# Alphanumeric
+alnum:  string(8)   from ['a'..'z'] + ['A'..'Z'] + ['0'..'9']
+
+# Literal charset — only the exact characters listed
+ops:    string(5)   from "+-*/"
+
+@println(dna)
+@println(word)
+@println(mixed, alnum, ops)
+
+
+# ── 4. CHARSET RANGES ────────────────────────────────────
+# Ranges use the same ['x'..'y'] syntax inside strings and arrays.
+# The + operator unions multiple charsets together.
+
+digit:  string(1)  from ['0'..'9']
+hex:    string(8)  from ['0'..'9'] + ['a'..'f']
+base64: string(16) from ['A'..'Z'] + ['a'..'z'] + ['0'..'9'] + "+/"
+
+@println(digit, hex, base64)
+
+
+# ── 5. ARRAY TYPES ───────────────────────────────────────
+# array(size) of <type>  — size can be a literal or variable.
+
+# Array of integers
+scores: array(5)  of int from [0..100]
+
+# Variable-length array
+seq:    array(n)  of int from [1..1000000]
+
+@println(scores)
+@println(seq)
+
+
+# ── 6. NESTED ARRAYS ─────────────────────────────────────
+# The element type of an array can itself be an array —
+# useful for grid / matrix test cases.
+
+rows: int from [2..5]
+cols: int from [2..5]
+
+grid:   array(rows) of array(cols) of int from [0..1]
+matrix: array(n)    of array(n)    of int from [-100..100]  # note: negative lower bound
+
+repeat rows:
+    row: array(cols) of int from [0..9]
+    @println(row)
+
+
+# ── 7. REPEAT — FIXED COUNT ──────────────────────────────
+# repeat <literal>: runs the body exactly that many times.
+
+repeat 3:
+    x: int from [1..100]
+    s: string(x) from ['a'..'z']
+    @println(x, s)
+
+
+# ── 8. REPEAT — VARIABLE COUNT ───────────────────────────
+# repeat <var>: uses a previously declared integer as the count.
+
+t: int from [1..5]
+
+repeat t:
+    val: int from [1..1000]
+    @println(val)
+
+
+# ── 9. NESTED REPEAT ─────────────────────────────────────
+# Repeat blocks can be nested arbitrarily deeply.
+
+r: int from [1..4]
+c: int from [1..4]
+
+repeat r:
+    repeat c:
+        cell: int from [0..9]
+        @println(cell)
+
+
+# ── 10. PRINTING MULTIPLE VARIABLES ──────────────────────
+# @println accepts a comma-separated list of variables.
+# Arrays are automatically unpacked — elements print space-separated.
+
+a:   int from [1..50]
+b:   int from [1..50]
+arr: array(a) of int from [0..1]
+
+@println(a, b)       # two scalars on one line
+@println(arr)        # all array elements on one line
+@println(a, b, arr)  # mixed: scalars then unpacked array
+
+
+# ── 11. PUTTING IT ALL TOGETHER ──────────────────────────
+# A realistic competitive-programming test case:
+#   N nodes, M edges, each edge (u, v, w).
+
+nodes:   int from [2..500]
+edges:   int from [1..1000]
+weights: array(edges) of int from [1..100000]
+
+@println(nodes, edges)
+
+repeat edges:
+    u: int from [1..nodes]
+    v: int from [1..nodes]
+    w: int from [1..100000]
+    @println(u, v, w)
+
+# Extra:
+# Raw value:
+
+@println("Hello, world!")
+str: string = "My string"
+money: int = 1000
+
+@println(str, money) # My string 1000

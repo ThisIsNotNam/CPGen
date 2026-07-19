@@ -1,0 +1,39 @@
+# Sample CPGen file — exercises every token/construct
+
+# --- simple variable declarations ---
+n:   int[1..100]
+m:   int[n..2*n]
+x:   int[0..1000000000]
+pi:  int[3..3]
+
+# --- string types ---
+s:   string(10) from ['a'..'z']
+t:   string(n)  from ['A'..'Z'] + ['0'..'9']
+u:   string(5)  from "ACGT"
+v:   string(8)  from ['a'..'z'] + "!@#"
+
+# --- array types ---
+arr: array(n) of int[1..100]
+mat: array(n) of array(m) of int[0..1]
+
+# --- print ---
+@print(n, m)
+@print(s)
+@print(arr)
+
+# --- repeat with literal count ---
+repeat 10:
+    a: int[1..n]
+    b: string(a) from ['a'..'z'] + ['A'..'Z']
+    @print(a, b)
+
+# --- repeat with variable count ---
+repeat n:
+    row: array(m) of int[0..n]
+    @print(row)
+
+# --- nested repeat ---
+repeat n:
+    repeat m:
+        c: int[1..1000]
+        @print(c)

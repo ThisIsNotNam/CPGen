@@ -1,0 +1,232 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "CPGen",
+  "scopeName": "source.cpgen",
+  "fileTypes": [
+    "cpgen"
+  ],
+  "patterns": [
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#print-stmt"
+    },
+    {
+      "include": "#println-stmt"
+    },
+    {
+      "include": "#repeat-stmt"
+    },
+    {
+      "include": "#var-decl"
+    },
+    {
+      "include": "#type-keywords"
+    },
+    {
+      "include": "#helper-keywords"
+    },
+    {
+      "include": "#string-literal"
+    },
+    {
+      "include": "#bracket-expr"
+    },
+    {
+      "include": "#paren-expr"
+    },
+    {
+      "include": "#number"
+    },
+    {
+      "include": "#range-operator"
+    },
+    {
+      "include": "#operator"
+    },
+    {
+      "include": "#colon"
+    },
+    {
+      "include": "#comma"
+    },
+    {
+      "include": "#identifier"
+    }
+  ],
+  "repository": {
+    "comment": {
+      "name": "comment.line.number-sign.cpgen",
+      "match": "#.*$"
+    },
+    "print-stmt": {
+      "comment": "@print — the @ is part of the token so we match it as a whole",
+      "name": "support.function.builtin.cpgen",
+      "match": "@print\\b"
+    },
+    "println-stmt": {
+      "comment": "@println — the @ is part of the token so we match it as a whole",
+      "name": "support.function.builtin.cpgen",
+      "match": "@println\\b"
+    },
+    "repeat-stmt": {
+      "comment": "repeat <count|var>: — highlight keyword and the loop count separately",
+      "match": "\\b(repeat)\\b",
+      "captures": {
+        "1": {
+          "name": "keyword.control.repeat.cpgen"
+        }
+      }
+    },
+    "var-decl": {
+      "comment": "Variable declaration: identifier at the start of a (possibly indented) line followed by colon",
+      "match": "^([ \\t]*)([A-Za-z_][A-Za-z0-9_]*)\\s*(:)",
+      "captures": {
+        "2": {
+          "name": "variable.other.declaration.cpgen"
+        },
+        "3": {
+          "name": "punctuation.separator.colon.cpgen"
+        }
+      }
+    },
+    "type-keywords": {
+      "comment": "Built-in type constructors",
+      "name": "storage.type.cpgen",
+      "match": "\\b(float|int|string|array)\\b"
+    },
+    "helper-keywords": {
+      "comment": "Keywords used inside type expressions",
+      "name": "keyword.other.cpgen",
+      "match": "\\b(of|from)\\b"
+    },
+    "string-literal": {
+      "comment": "Both single- and double-quoted string literals (charset literals and length specifiers)",
+      "patterns": [
+        {
+          "name": "string.quoted.double.cpgen",
+          "begin": "\"",
+          "end": "\"",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin.cpgen"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.cpgen"
+            }
+          }
+        },
+        {
+          "name": "string.quoted.single.cpgen",
+          "begin": "'",
+          "end": "'",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.begin.cpgen"
+            }
+          },
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.cpgen"
+            }
+          }
+        }
+      ]
+    },
+    "bracket-expr": {
+      "comment": "Square-bracket regions: int[lo..hi] bounds and charset ['a'..'z'] ranges",
+      "name": "meta.bracket-expr.cpgen",
+      "begin": "\\[",
+      "end": "\\]",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.section.brackets.begin.cpgen"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.section.brackets.end.cpgen"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#string-literal"
+        },
+        {
+          "include": "#number"
+        },
+        {
+          "include": "#range-operator"
+        },
+        {
+          "include": "#operator"
+        },
+        {
+          "include": "#identifier"
+        }
+      ]
+    },
+    "paren-expr": {
+      "comment": "Parenthesised regions: array(size) and string(len) size arguments, and @print(...) arguments",
+      "name": "meta.paren-expr.cpgen",
+      "begin": "\\(",
+      "end": "\\)",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.section.parens.begin.cpgen"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.section.parens.end.cpgen"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#number"
+        },
+        {
+          "include": "#operator"
+        },
+        {
+          "include": "#comma"
+        },
+        {
+          "include": "#identifier"
+        }
+      ]
+    },
+    "number": {
+      "comment": "Floats, scientific notation, and plain integers — ordered to avoid partial matches",
+      "name": "constant.numeric.cpgen",
+      "match": "\\d+\\.\\d+|\\d+[eE][+-]?\\d+|\\d+"
+    },
+    "range-operator": {
+      "comment": "The .. operator used in int[lo..hi] and charset ['a'..'z']",
+      "name": "keyword.operator.range.cpgen",
+      "match": "\\.\\."
+    },
+    "operator": {
+      "comment": "Arithmetic operators used in size/bound expressions and charset union (+)",
+      "name": "keyword.operator.arithmetic.cpgen",
+      "match": "[+\\-*/]"
+    },
+    "colon": {
+      "comment": "Structural colon ending repeat and (non-declaration) lines",
+      "name": "punctuation.separator.colon.cpgen",
+      "match": ":"
+    },
+    "comma": {
+      "name": "punctuation.separator.comma.cpgen",
+      "match": ","
+    },
+    "identifier": {
+      "comment": "Variable references (uses, repeat counts, etc.) — lowest priority",
+      "name": "variable.other.cpgen",
+      "match": "[A-Za-z_][A-Za-z0-9_]*"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "cpgen-syntax",
+  "displayName": "CPGen",
+  "description": "Syntax highlighting for the CPGen test-case generation DSL",
+  "version": "0.1.0",
+  "publisher": "cpgen",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "cpgen",
+        "aliases": [
+          "CPGen",
+          "cpgen"
+        ],
+        "extensions": [
+          ".cpgen",
+          ".cpg"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "cpgen",
+        "scopeName": "source.cpgen",
+        "path": "./syntaxes/cpgen.tmLanguage.json"
+      }
+    ]
+  }
+}
